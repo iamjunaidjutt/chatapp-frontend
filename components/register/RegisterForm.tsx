@@ -2,12 +2,14 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import styles from "./register.module.scss";
 import {
 	registerSchema,
 	RegisterSchemaType,
-} from "@/utilities/validation/register.schema";
+} from "@/utils/validators/register.schema";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -20,8 +22,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { routes } from "@/config/routes";
+import { handleRegistration } from "./register.action";
 
 const RegisterForm = () => {
+	const router = useRouter();
+	const [isLoading, setIsLoading] = useState(false);
 	const form = useForm<RegisterSchemaType>({
 		resolver: zodResolver(registerSchema),
 		defaultValues: {
@@ -34,7 +40,14 @@ const RegisterForm = () => {
 
 	const submit = async (data: RegisterSchemaType) => {
 		console.log("Form submitted with data:", data);
-		// Handle form submission logic here
+		setIsLoading(true);
+		await handleRegistration(data);
+		data.username = "";
+		data.email = "";
+		data.password = "";
+		data.confirmPassword = "";
+		setIsLoading(false);
+		router.push(routes.login);
 	};
 
 	return (
@@ -124,14 +137,18 @@ const RegisterForm = () => {
 					<FormControl>
 						<FormDescription>
 							Already have an account?{" "}
-							<Link href="/login" className="text-blue-500">
+							<Link href={routes.login} className="text-blue-500">
 								Log in
 							</Link>
 						</FormDescription>
 					</FormControl>
 				</FormItem>
-				<Button type="submit" className={styles.btn}>
-					Register
+				<Button
+					type="submit"
+					className={styles.btn}
+					disabled={isLoading}
+				>
+					{isLoading ? "Registering..." : "Register"}
 				</Button>
 			</form>
 		</Form>
