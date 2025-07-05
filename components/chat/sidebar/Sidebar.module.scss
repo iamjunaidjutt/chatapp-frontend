@@ -1,0 +1,38 @@
+.sidebar {
+	@apply flex flex-col h-full bg-card border-r border-border;
+
+	.header {
+		@apply p-5 border-b border-border bg-card;
+
+		.title {
+			@apply text-2xl font-semibold mb-3 text-foreground;
+		}
+
+		.searchContainer {
+			@apply relative;
+
+			.searchInput {
+				@apply w-full px-4 py-2.5 border border-border rounded-lg bg-background text-foreground text-sm;
+				@apply placeholder-muted-foreground transition-colors focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring;
+			}
+		}
+	}
+
+	.content {
+		@apply flex-1 overflow-hidden flex flex-col;
+	}
+}
+
+@media (max-width: 768px) {
+	.sidebar {
+		@apply w-full max-w-full;
+	}
+
+	.header {
+		@apply p-4;
+
+		.title {
+			@apply text-xl;
+		}
+	}
+}

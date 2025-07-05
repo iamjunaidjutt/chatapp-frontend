@@ -1,0 +1,33 @@
+.messageList {
+	@apply flex flex-col p-5 gap-1 min-h-full;
+}
+
+.emptyMessages {
+	@apply flex flex-col items-center justify-center h-full py-10 px-5 text-center;
+
+	.emptyIcon {
+		@apply text-5xl mb-4 opacity-30;
+	}
+
+	.emptyText {
+		@apply text-base text-muted-foreground m-0;
+	}
+}
+
+@media (max-width: 768px) {
+	.messageList {
+		@apply p-4 gap-0.5;
+	}
+
+	.emptyMessages {
+		@apply py-7 px-4;
+
+		.emptyIcon {
+			@apply text-4xl;
+		}
+
+		.emptyText {
+			@apply text-sm;
+		}
+	}
+}

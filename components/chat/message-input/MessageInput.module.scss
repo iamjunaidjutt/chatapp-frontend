@@ -1,0 +1,71 @@
+.messageInput {
+	@apply flex gap-3 items-end p-0 bg-card;
+
+	.inputContainer {
+		@apply flex-1 flex items-end gap-2 bg-background border border-border rounded-3xl px-3 py-2;
+		@apply transition-colors focus-within:border-ring focus-within:shadow-sm;
+
+		.attachButton,
+		.emojiButton {
+			@apply w-8 h-8 border-none bg-transparent cursor-pointer rounded-full flex items-center justify-center;
+			@apply text-base transition-all duration-200 flex-shrink-0;
+			@apply hover:bg-accent hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed;
+		}
+
+		.textarea {
+			@apply flex-1 border-none outline-none resize-none bg-transparent text-foreground;
+			@apply text-sm leading-relaxed py-2 min-h-6 max-h-32 overflow-y-auto;
+			@apply placeholder-muted-foreground disabled:cursor-not-allowed disabled:opacity-50;
+			
+			&::-webkit-scrollbar {
+				@apply w-1;
+			}
+
+			&::-webkit-scrollbar-track {
+				@apply bg-transparent;
+			}
+
+			&::-webkit-scrollbar-thumb {
+				@apply bg-border rounded-sm hover:bg-muted-foreground;
+			}
+		}
+	}
+
+	.sendButton {
+		@apply w-11 h-11 border-none rounded-full bg-primary text-primary-foreground cursor-pointer;
+		@apply flex items-center justify-center transition-all duration-200 flex-shrink-0;
+		@apply hover:scale-105 hover:shadow-lg active:scale-95;
+		@apply disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none;
+
+		.sendIcon {
+			@apply text-lg transform -rotate-45;
+		}
+	}
+}
+
+@media (max-width: 768px) {
+	.messageInput {
+		@apply gap-2;
+
+		.inputContainer {
+			@apply px-2.5 py-1.5;
+
+			.attachButton,
+			.emojiButton {
+				@apply w-7 h-7 text-sm;
+			}
+
+			.textarea {
+				@apply text-sm py-1.5;
+			}
+		}
+
+		.sendButton {
+			@apply w-10 h-10;
+
+			.sendIcon {
+				@apply text-base;
+			}
+		}
+	}
+}

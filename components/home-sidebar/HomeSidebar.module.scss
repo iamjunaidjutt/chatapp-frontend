@@ -1,0 +1,188 @@
+// =============================================================================
+// HOME SIDEBAR COMPONENT STYLES
+// =============================================================================
+
+// Main sidebar provider container
+.sidebarProvider {
+	@apply h-screen w-full;
+}
+
+// Sidebar panel styles
+.sidebar {
+	@apply flex flex-col bg-sidebar text-sidebar-foreground;
+}
+
+// Sidebar header with app branding
+.sidebarHeader {
+	@apply border-b border-sidebar-border;
+	
+	.headerContent {
+		@apply flex items-center gap-2 px-2 py-4;
+		
+		.appIcon {
+			@apply flex aspect-square size-8 items-center justify-center rounded-lg;
+			@apply bg-primary text-primary-foreground shadow-sm;
+			@apply transition-all duration-200 hover:shadow-md;
+			
+			.appIconIcon {
+				@apply size-4;
+			}
+		}
+		
+		.appInfo {
+			@apply grid flex-1 text-left text-sm leading-tight;
+			
+			.appTitle {
+				@apply truncate font-semibold;
+			}
+			
+			.appDescription {
+				@apply truncate text-xs text-muted-foreground;
+			}
+		}
+	}
+}
+
+// Sidebar main content area
+.sidebarContent {
+	@apply flex-1 overflow-auto;
+	
+	// Navigation section
+	.navigationGroup {
+		@apply space-y-1;
+		
+		.navigationGroupLabel {
+			@apply text-xs font-medium text-sidebar-foreground/70 px-2 py-1 mb-1;
+			@apply uppercase tracking-wider;
+		}
+		
+		.navigationMenu {
+			@apply space-y-1;
+			
+			.navigationItem {
+				@apply w-full;
+				
+				.navigationButton {
+					@apply w-full flex items-center gap-2 px-2 py-2 text-sm;
+					@apply rounded-md text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground;
+					@apply transition-colors duration-200 border-none bg-transparent;
+					
+					&.active {
+						@apply bg-sidebar-accent text-sidebar-accent-foreground font-medium;
+					}
+					
+					.navigationIcon {
+						@apply size-4 shrink-0;
+					}
+					
+					.navigationText {
+						@apply truncate;
+					}
+				}
+			}
+		}
+	}
+	
+	// Quick actions section
+	.quickActionsGroup {
+		@apply space-y-1 mt-4;
+		
+		.quickActionsButton {
+			@apply w-full flex items-center gap-2 px-2 py-2 text-sm;
+			@apply rounded-md text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground;
+			@apply transition-colors duration-200 border-none bg-transparent;
+		}
+	}
+}
+
+// Sidebar footer with user info and actions
+.sidebarFooter {
+	@apply border-t border-sidebar-border;
+	
+	.footerContent {
+		@apply flex items-center justify-between p-2;
+		
+		// User profile section
+		.userSection {
+			@apply flex items-center gap-2 flex-1 ml-2;
+			
+			.userAvatar {
+				@apply size-8;
+			}
+			
+			.userInfo {
+				@apply grid flex-1 text-left text-sm leading-tight;
+				
+				.userName {
+					@apply truncate font-medium;
+				}
+				
+				.userEmail {
+					@apply truncate text-xs text-muted-foreground;
+				}
+			}
+			
+			.logoutButton {
+				@apply text-xs px-2 py-1 rounded-sm;
+				@apply bg-transparent border-none text-sidebar-foreground/70;
+				@apply hover:bg-sidebar-accent hover:text-sidebar-accent-foreground;
+				@apply transition-colors duration-200;
+			}
+		}
+		
+		// Not signed in state
+		.notSignedIn {
+			@apply flex-1 ml-2;
+			
+			.notSignedInText {
+				@apply text-sm text-muted-foreground;
+			}
+		}
+	}
+}
+
+// Main content area (right side of sidebar)
+.sidebarInset {
+	@apply flex flex-col flex-1 min-w-0;
+	
+	// Top header bar
+	.mainHeader {
+		@apply flex h-16 shrink-0 items-center gap-2 border-b border-border px-4;
+
+		.sidebarTrigger {
+			@apply -ml-1;
+		}
+		
+		.headerActions {
+			@apply ml-auto;
+		}
+	}
+	
+	// Main content container
+	.mainContent {
+		@apply flex flex-1 flex-col p-4 overflow-auto;
+	}
+}
+
+// Responsive design
+@media (max-width: 768px) {
+	.sidebarFooter {
+		.footerContent {
+			.userSection {
+				@apply flex-col items-start gap-1;
+				
+				.userName {
+					@apply text-xs;
+				}
+				
+				.userEmail {
+					@apply text-xs;
+				}
+				
+				.logoutButton {
+					@apply self-start mt-1;
+				}
+			}
+		}
+	}
+}

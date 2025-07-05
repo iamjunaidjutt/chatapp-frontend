@@ -1,0 +1,40 @@
+
+.chatLayout {
+	@apply flex h-screen w-full bg-background text-foreground overflow-hidden;
+
+	.sidebarContainer {
+		@apply w-80 min-w-80 h-full border-r border-border bg-card flex flex-col;
+	}
+
+	.mainContent {
+		@apply flex-1 flex flex-col h-full overflow-hidden;
+
+		.statusBar {
+			@apply h-16 min-h-16 border-b border-border flex items-center justify-between px-5 bg-card;
+		}
+	}
+
+	.loadingContainer {
+		@apply flex justify-center items-center h-screen w-full;
+
+		.loadingSpinner {
+			@apply text-lg text-muted-foreground;
+		}
+	}
+}
+
+@media (max-width: 768px) {
+	.chatLayout {
+		.sidebarContainer {
+			@apply w-full absolute z-10 transform -translate-x-full transition-transform duration-300;
+			
+			&.open {
+				@apply transform-none;
+			}
+		}
+
+		.mainContent {
+			@apply w-full;
+		}
+	}
+}

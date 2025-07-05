@@ -1,0 +1,86 @@
+// =============================================================================
+// NAVBAR COMPONENT STYLES
+// =============================================================================
+
+// Main navbar container
+.navbar {
+	@apply bg-card shadow-sm border-b border-border;
+	
+	.container {
+		@apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+		
+		.content {
+			@apply flex justify-between items-center h-16;
+			
+			// Left side branding
+			.brand {
+				@apply flex items-center;
+				
+				.logo {
+					@apply text-xl font-bold text-foreground;
+					@apply transition-colors duration-200;
+					
+					.logoAccent {
+						@apply text-primary;
+					}
+				}
+			}
+			
+			// Right side user section
+			.rightSection {
+				@apply flex items-center space-x-4;
+				
+				.userSection {
+					@apply flex items-center space-x-4;
+					
+					.userInfo {
+						@apply text-sm;
+						
+						.userName {
+							@apply text-foreground font-medium;
+						}
+						
+						.userEmail {
+							@apply text-muted-foreground text-xs;
+						}
+					}
+					
+					.logoutButton {
+						@apply hover:bg-destructive/10 hover:border-destructive hover:text-destructive;
+						@apply transition-colors duration-200;
+					}
+				}
+			}
+		}
+	}
+}
+
+// Not signed in state
+.notSignedIn {
+	@apply text-sm text-muted-foreground;
+}
+
+// Responsive design
+@media (max-width: 640px) {
+	.navbar {
+		.container {
+			.content {
+				.rightSection {
+					.userSection {
+						@apply space-x-2;
+						
+						.userInfo {
+							@apply hidden;
+						}
+					}
+				}
+				
+				.brand {
+					.logo {
+						@apply text-lg;
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,53 @@
+.onlineStatus {
+	@apply flex justify-between items-center w-full p-0;
+
+	.statusIndicator {
+		@apply flex items-center gap-2;
+
+		.onlineIcon {
+			@apply text-xs animate-pulse;
+		}
+
+		.statusText {
+			@apply text-sm text-foreground font-medium;
+		}
+	}
+
+	.roomDetails {
+		@apply flex items-center gap-3 flex-shrink-0;
+
+		.roomType {
+			@apply text-xs text-muted-foreground bg-secondary px-2 py-1 rounded-xl font-medium whitespace-nowrap;
+		}
+
+		.roomDescription {
+			@apply text-xs text-muted-foreground italic max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis;
+		}
+	}
+}
+
+@media (max-width: 768px) {
+	.onlineStatus {
+		@apply flex-col items-start gap-1.5;
+
+		.statusIndicator {
+			@apply gap-1.5;
+
+			.statusText {
+				@apply text-xs;
+			}
+		}
+
+		.roomDetails {
+			@apply gap-2;
+
+			.roomType {
+				@apply text-xs px-1.5 py-0.5;
+			}
+
+			.roomDescription {
+				@apply text-xs max-w-[150px];
+			}
+		}
+	}
+}

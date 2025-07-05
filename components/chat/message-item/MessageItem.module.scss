@@ -1,0 +1,111 @@
+.messageItem {
+	@apply flex flex-col mb-2 max-w-full break-words;
+
+	&.currentUser {
+		@apply items-end;
+		
+		.messageBubble {
+			@apply bg-primary text-primary-foreground rounded-br-sm;
+		}
+		
+		.messageHeader {
+			@apply text-right;
+		}
+		
+		.username {
+			@apply text-primary;
+		}
+	}
+
+	&.otherUser {
+		@apply items-start;
+		
+		.messageBubble {
+			@apply bg-secondary text-secondary-foreground rounded-bl-sm;
+		}
+		
+		.messageHeader {
+			@apply text-left;
+		}
+		
+		.username {
+			@apply text-foreground;
+		}
+	}
+
+	&:hover {
+		.messageTime {
+			@apply opacity-100;
+		}
+	}
+}
+
+.messageHeader {
+	@apply flex justify-between items-center mb-1 px-2 max-w-[70%];
+
+	.username {
+		@apply text-sm font-semibold mr-2;
+	}
+
+	.timestamp {
+		@apply text-xs text-muted-foreground flex-shrink-0;
+	}
+}
+
+.messageContent {
+	@apply flex flex-col items-start max-w-[70%];
+}
+
+.messageBubble {
+	@apply px-4 py-3 rounded-2xl max-w-full break-words relative;
+	@apply shadow-sm;
+
+	.messageText {
+		@apply m-0 text-sm leading-relaxed whitespace-pre-wrap;
+	}
+
+	.editedIndicator {
+		@apply text-xs opacity-70 italic ml-2;
+	}
+}
+
+.messageTime {
+	@apply text-xs text-muted-foreground mt-0.5 px-2 opacity-0 transition-opacity duration-200;
+}
+
+@media (max-width: 768px) {
+	.messageItem {
+		@apply mb-1.5;
+		
+		&.currentUser,
+		&.otherUser {
+			.messageContent {
+				@apply max-w-[85%];
+			}
+		}
+	}
+
+	.messageHeader {
+		@apply max-w-[85%] px-1;
+
+		.username {
+			@apply text-xs;
+		}
+
+		.timestamp {
+			@apply text-xs;
+		}
+	}
+
+	.messageBubble {
+		@apply px-3.5 py-2.5;
+
+		.messageText {
+			@apply text-sm;
+		}
+	}
+
+	.messageTime {
+		@apply text-xs px-1;
+	}
+}

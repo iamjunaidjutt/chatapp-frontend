@@ -1,0 +1,116 @@
+.chatWindow {
+	@apply flex flex-col h-full bg-background;
+}
+
+.chatHeader {
+	@apply flex justify-between items-center px-5 py-4 border-b border-border bg-card min-h-[70px];
+
+	.roomInfo {
+		@apply flex flex-col gap-0.5;
+
+		.roomName {
+			@apply text-xl font-semibold text-foreground m-0 whitespace-nowrap overflow-hidden text-ellipsis max-w-xs;
+		}
+
+		.participantCount {
+			@apply text-sm text-muted-foreground font-medium;
+		}
+	}
+
+	.chatActions {
+		@apply flex gap-2 items-center;
+
+		.actionButton {
+			@apply w-10 h-10 border-none rounded-lg bg-secondary text-secondary-foreground cursor-pointer;
+			@apply transition-all duration-200 flex items-center justify-center text-base;
+			@apply hover:bg-accent hover:scale-105 active:scale-95;
+		}
+	}
+}
+
+.messagesContainer {
+	@apply flex-1 overflow-y-auto overflow-x-hidden bg-background relative;
+	
+	&::-webkit-scrollbar {
+		@apply w-2;
+	}
+
+	&::-webkit-scrollbar-track {
+		@apply bg-background;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		@apply bg-border rounded;
+		
+		&:hover {
+			@apply bg-muted-foreground;
+		}
+	}
+}
+
+.typingIndicator {
+	@apply px-5 py-2 bg-card border-t border-border text-sm text-muted-foreground italic;
+	@apply animate-pulse;
+}
+
+.messageInputContainer {
+	@apply bg-card border-t border-border px-5 py-4;
+}
+
+.emptyState {
+	@apply flex flex-col items-center justify-center h-full py-10 px-5 text-center bg-background;
+
+	.emptyIcon {
+		@apply text-8xl mb-5 opacity-30;
+	}
+
+	.emptyTitle {
+		@apply text-2xl font-semibold text-foreground m-0 mb-3;
+	}
+
+	.emptyDescription {
+		@apply text-base text-muted-foreground leading-relaxed m-0 max-w-md;
+	}
+}
+
+@media (max-width: 768px) {
+	.chatHeader {
+		@apply px-4 py-3 min-h-[60px];
+
+		.roomInfo {
+			.roomName {
+				@apply text-lg max-w-[200px];
+			}
+
+			.participantCount {
+				@apply text-xs;
+			}
+		}
+
+		.chatActions {
+			.actionButton {
+				@apply w-9 h-9 text-sm;
+			}
+		}
+	}
+
+	.messageInputContainer {
+		@apply px-4 py-3;
+	}
+
+	.emptyState {
+		@apply py-7 px-4;
+
+		.emptyIcon {
+			@apply text-6xl;
+		}
+
+		.emptyTitle {
+			@apply text-xl;
+		}
+
+		.emptyDescription {
+			@apply text-sm;
+		}
+	}
+}

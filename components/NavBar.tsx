@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { logoutAction } from "@/app/actions/auth";
+import { logoutAction } from "@/app/(auth)/actions/auth.action";
 
 interface User {
 	name?: string | null;

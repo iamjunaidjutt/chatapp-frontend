@@ -1,0 +1,143 @@
+.settingsPanel {
+	@apply flex flex-col h-full overflow-hidden;
+}
+
+.settingsHeader {
+	@apply flex justify-between items-center px-5 py-4 border-b border-border bg-card;
+
+	.title {
+		@apply text-lg font-semibold text-foreground m-0;
+	}
+
+	.saveButton {
+		@apply bg-primary text-primary-foreground border-none px-4 py-2 rounded-md text-sm font-medium cursor-pointer;
+		@apply transition-all duration-200 hover:bg-primary/90 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0;
+	}
+}
+
+.settingsContent {
+	@apply flex-1 p-5 overflow-y-auto flex flex-col gap-6;
+
+	&::-webkit-scrollbar {
+		@apply w-1.5;
+	}
+
+	&::-webkit-scrollbar-track {
+		@apply bg-background;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		@apply bg-border rounded-sm hover:bg-muted-foreground;
+	}
+}
+
+.section {
+	@apply flex flex-col gap-3;
+
+	.sectionTitle {
+		@apply text-base font-semibold text-foreground m-0 pb-2 border-b border-border;
+	}
+}
+
+.profileInfo {
+	@apply flex items-center gap-3 py-3;
+
+	.avatar {
+		@apply w-12 h-12 rounded-full overflow-hidden bg-secondary flex items-center justify-center;
+
+		.avatarImage {
+			@apply w-full h-full object-cover;
+		}
+
+		.avatarPlaceholder {
+			@apply text-xl font-semibold text-secondary-foreground;
+		}
+	}
+
+	.userInfo {
+		@apply flex flex-col gap-0.5;
+
+		.username {
+			@apply text-base font-semibold text-foreground m-0;
+		}
+
+		.email {
+			@apply text-sm text-muted-foreground m-0;
+		}
+	}
+}
+
+.setting {
+	@apply flex flex-col gap-1;
+
+	.settingLabel {
+		@apply flex justify-between items-center py-2 text-sm text-foreground cursor-pointer;
+		@apply transition-colors hover:text-primary;
+
+		span {
+			@apply font-medium;
+		}
+	}
+
+	.checkbox {
+		@apply w-4 h-4 cursor-pointer;
+		accent-color: hsl(var(--primary));
+	}
+
+	.select {
+		@apply px-3 py-1.5 border border-border rounded-md bg-background text-foreground text-sm cursor-pointer;
+		@apply transition-colors focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring;
+	}
+}
+
+@media (max-width: 768px) {
+	.settingsHeader {
+		@apply px-4 py-3;
+
+		.title {
+			@apply text-base;
+		}
+
+		.saveButton {
+			@apply px-3 py-1.5 text-xs;
+		}
+	}
+
+	.settingsContent {
+		@apply p-4 gap-5;
+	}
+
+	.section {
+		.sectionTitle {
+			@apply text-sm;
+		}
+	}
+
+	.profileInfo {
+		@apply gap-2.5;
+
+		.avatar {
+			@apply w-11 h-11;
+
+			.avatarPlaceholder {
+				@apply text-lg;
+			}
+		}
+
+		.userInfo {
+			.username {
+				@apply text-sm;
+			}
+
+			.email {
+				@apply text-xs;
+			}
+		}
+	}
+
+	.setting {
+		.settingLabel {
+			@apply text-xs;
+		}
+	}
+}

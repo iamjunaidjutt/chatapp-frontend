@@ -3,6 +3,8 @@ export const routes = {
 	login: "/login",
 	register: "/register",
 	logout: "/logout",
+	rooms: "/rooms",
+	chat: "/chat",
 	resetPassword: "reset-password",
 	resetEmailSent: "reset-email-sent",
 	leads: {

@@ -1,31 +1,37 @@
 .login {
-    @apply flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 w-full;
+    @apply flex flex-col items-center justify-center h-screen bg-background text-foreground w-full relative;
+
+    .themeToggle {
+        @apply absolute top-4 right-4 z-10;
+    }
 
     .chat {
         @apply text-4xl font-bold;
         @apply text-center mb-8;
         
         .app {
-            @apply text-blue-500;
+            @apply text-primary;
         }
     }
 
     .formContainer {
-        @apply bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md;
+        @apply bg-card p-8 rounded-lg shadow-md w-full max-w-md border border-border;
 
         .form {
             @apply flex flex-col space-y-4;
 
             .title {
-                @apply text-2xl font-bold mb-4;
+                @apply text-2xl font-bold mb-4 text-foreground;
             }
 
             .input {
-                @apply border border-gray-300 dark:border-gray-700 rounded-md p-2;
+                @apply border border-input rounded-md p-2 bg-background text-foreground;
+                @apply focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent;
             }
 
             .btn {
-                @apply bg-blue-500 text-white rounded-md p-2;
+                @apply bg-primary text-primary-foreground rounded-md p-2;
+                @apply hover:bg-primary/90 transition-colors duration-200;
             }
         }
     }

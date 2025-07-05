@@ -1,0 +1,98 @@
+.chatListItem {
+	@apply flex items-center px-4 py-3 border-b border-border cursor-pointer transition-all duration-200 relative;
+
+	&:hover {
+		@apply bg-accent;
+	}
+
+	&.selected {
+		@apply bg-primary text-primary-foreground;
+		
+		.roomName {
+			@apply text-primary-foreground;
+		}
+		
+		.roomDescription,
+		.roomStats {
+			@apply text-primary-foreground opacity-90;
+		}
+	}
+
+	&:last-child {
+		@apply border-b-0;
+	}
+}
+
+.roomInfo {
+	@apply flex-1 min-w-0;
+}
+
+.roomHeader {
+	@apply flex justify-between items-center mb-1;
+
+	.roomName {
+		@apply text-base font-semibold text-foreground m-0 whitespace-nowrap overflow-hidden text-ellipsis;
+	}
+
+	.roomMeta {
+		@apply flex items-center gap-2 flex-shrink-0;
+
+		.participantCount {
+			@apply text-xs text-muted-foreground font-medium;
+		}
+
+		.onlineIndicator {
+			@apply w-2 h-2 rounded-full bg-green-500 animate-pulse;
+		}
+	}
+}
+
+.roomDetails {
+	@apply flex flex-col gap-1;
+
+	.roomDescription {
+		@apply text-sm text-muted-foreground leading-snug whitespace-nowrap overflow-hidden text-ellipsis;
+	}
+
+	.roomStats {
+		@apply flex justify-between items-center text-xs text-muted-foreground;
+
+		.role {
+			@apply bg-secondary text-secondary-foreground px-1.5 py-0.5 rounded text-xs font-medium uppercase;
+		}
+
+		.lastSeen {
+			@apply text-xs text-muted-foreground;
+		}
+	}
+}
+
+.notificationBadge {
+	@apply ml-2 flex items-center justify-center w-6 h-6 bg-primary rounded-full flex-shrink-0;
+
+	.notificationIcon {
+		@apply text-xs text-primary-foreground;
+	}
+}
+
+@media (max-width: 768px) {
+	.chatListItem {
+		@apply px-3 py-2.5;
+	}
+
+	.roomHeader {
+		.roomName {
+			@apply text-sm;
+		}
+	}
+
+	.roomDetails {
+		.roomDescription {
+			@apply text-xs;
+		}
+
+		.roomStats {
+			@apply text-xs;
+		}
+	}
+}

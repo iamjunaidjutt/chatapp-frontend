@@ -1,0 +1,102 @@
+// =============================================================================
+// ROOMS PAGE COMPONENT STYLES
+// =============================================================================
+
+// Main container
+.container {
+	@apply flex-1 max-w-6xl mx-auto p-6 space-y-6;
+}
+
+// Page header section
+.header {
+	@apply flex justify-between items-start gap-4;
+	
+	.title {
+		@apply text-3xl font-bold text-foreground;
+	}
+	
+	.subtitle {
+		@apply text-muted-foreground mt-1;
+	}
+	
+	.createButton {
+		@apply bg-primary text-primary-foreground;
+		@apply hover:bg-primary/90 transition-colors duration-200;
+	}
+}
+
+// Rooms grid layout
+.roomsGrid {
+	@apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+	
+	.roomCard {
+		@apply bg-card border border-border rounded-lg;
+		@apply hover:shadow-lg transition-all duration-200;
+		@apply cursor-pointer hover:border-accent;
+		
+		.cardHeader {
+			@apply flex justify-between items-start gap-2;
+			
+			.roomName {
+				@apply text-lg font-semibold text-foreground;
+			}
+			
+			.badge {
+				@apply text-xs;
+			}
+		}
+		
+		.description {
+			@apply text-sm text-muted-foreground;
+		}
+		
+		.roomInfo {
+			@apply space-y-2 mb-4;
+			
+			.participants {
+				@apply flex items-center gap-2 text-sm text-muted-foreground;
+			}
+			
+			.lastActivity {
+				@apply text-xs text-muted-foreground;
+			}
+		}
+		
+		.joinButton {
+			@apply w-full border-border;
+			@apply hover:bg-accent hover:text-accent-foreground;
+		}
+	}
+}
+
+// Loading and empty states
+.loading {
+	@apply flex items-center justify-center h-64;
+	
+	.spinner {
+		@apply text-lg text-muted-foreground;
+	}
+}
+
+.emptyState {
+	@apply flex flex-col items-center justify-center py-12 text-center;
+	
+	.emptyTitle {
+		@apply text-xl font-semibold text-foreground mb-2;
+	}
+	
+	.emptyDescription {
+		@apply text-muted-foreground;
+	}
+}
+
+// Responsive design
+@media (max-width: 768px) {
+	.header {
+		@apply flex-col items-start gap-4;
+	}
+	
+	.roomsGrid {
+		@apply grid-cols-1;
+	}
+}

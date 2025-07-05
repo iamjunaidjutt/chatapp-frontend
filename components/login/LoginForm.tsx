@@ -19,7 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { routes } from "@/config/routes";
-import { loginAction } from "@/app/actions/auth";
+import { loginAction } from "@/app/(auth)/actions/auth.action";
 
 const LoginForm = () => {
 	const [isLoading, setIsLoading] = useState(false);

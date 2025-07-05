@@ -1,0 +1,77 @@
+.chatList {
+	@apply flex flex-col h-full overflow-hidden;
+}
+
+.listHeader {
+	@apply flex justify-between items-center px-5 py-4 border-b border-border bg-card;
+
+	.listTitle {
+		@apply text-lg font-semibold text-foreground m-0;
+	}
+
+	.chatCount {
+		@apply text-sm text-muted-foreground bg-secondary px-2 py-1 rounded-xl font-medium;
+	}
+}
+
+.listContent {
+	@apply flex-1 overflow-y-auto overflow-x-hidden;
+	
+	&::-webkit-scrollbar {
+		@apply w-1.5;
+	}
+
+	&::-webkit-scrollbar-track {
+		@apply bg-background;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		@apply bg-border rounded-sm;
+		
+		&:hover {
+			@apply bg-muted-foreground;
+		}
+	}
+}
+
+.emptyState {
+	@apply flex flex-col items-center justify-center py-10 px-5 text-center h-full;
+
+	.emptyIcon {
+		@apply text-6xl mb-4 opacity-30;
+	}
+
+	.emptyTitle {
+		@apply text-xl font-semibold text-foreground m-0 mb-2;
+	}
+
+	.emptyDescription {
+		@apply text-base text-muted-foreground leading-relaxed m-0 max-w-xs;
+	}
+}
+
+@media (max-width: 768px) {
+	.listHeader {
+		@apply px-4 py-3;
+
+		.listTitle {
+			@apply text-base;
+		}
+	}
+
+	.emptyState {
+		@apply py-7 px-4;
+
+		.emptyIcon {
+			@apply text-5xl;
+		}
+
+		.emptyTitle {
+			@apply text-lg;
+		}
+
+		.emptyDescription {
+			@apply text-sm;
+		}
+	}
+}
