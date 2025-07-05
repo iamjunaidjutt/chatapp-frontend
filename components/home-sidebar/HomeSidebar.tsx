@@ -77,7 +77,7 @@ export default function HomeSidebar({ user, children }: HomeSidebarProps) {
 		<SidebarProvider>
 			<Sidebar>
 				<SidebarHeader className="border-b border-border">
-					<div className="flex items-center gap-2 px-2 py-4">
+					<div className="flex items-center gap-2 px-2 py-4 ">
 						<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
 							<MessageCircle className="size-4" />
 						</div>
@@ -178,13 +178,13 @@ export default function HomeSidebar({ user, children }: HomeSidebarProps) {
 			</Sidebar>
 
 			<SidebarInset>
-				<header className="flex h-16 shrink-0 items-center gap-2 border-b border-border px-4">
+				<header className="flex h-[5.1rem] shrink-0 items-center gap-2 border-b border-border px-4">
 					<SidebarTrigger className="-ml-1" />
 					<div className="ml-auto">
 						<ModeToggle />
 					</div>
 				</header>
-				<div className="flex flex-1 flex-col p-4 overflow-auto">
+				<div className="flex flex-1 flex-col p-4 overflow-auto items-end">
 					{children}
 				</div>
 			</SidebarInset>

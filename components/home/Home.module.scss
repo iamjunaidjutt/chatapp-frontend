@@ -1,102 +1,86 @@
+// =============================================================================
+// HOME COMPONENT STYLES
+// =============================================================================
+
+// Main content wrapper
 .contentWrapper {
-	height: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	@apply h-full w-9/12 flex items-center justify-center;
 }
 
+// Welcome card container
 .welcomeCard {
-	border: 2px dashed hsl(var(--border));
-	border-radius: 0.5rem;
-	padding: 2rem;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	transition: all 0.2s;
-	background: hsl(var(--card) / 0.5);
-	backdrop-filter: blur(4px);
-	min-height: 400px;
-	width: 100%;
-	max-width: 600px;
+	@apply border-2 border-dashed border-border rounded-lg p-8 flex items-center justify-center;
+	@apply transition-all duration-200 bg-card/50 backdrop-blur-sm min-h-[400px] w-full max-w-2xl;
 	
 	&:hover {
-		border-color: hsl(var(--accent));
-		box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+		@apply border-accent shadow-lg;
 	}
-}
-
-.welcomeContent {
-	text-align: center;
-	max-width: 28rem;
-	margin: 0 auto;
-}
-
-.title {
-	font-size: 1.875rem;
-	font-weight: 700;
-	color: hsl(var(--foreground));
-	margin-bottom: 1rem;
-	background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)));
-	background-clip: text;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
 	
-	@media (min-width: 640px) {
-		font-size: 2.25rem;
+	// Welcome content container
+	.welcomeContent {
+		@apply text-center max-w-md mx-auto;
+		
+		// Main title with gradient
+		.title {
+			@apply text-3xl font-bold text-foreground mb-4;
+			@apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+			
+			@media (min-width: 640px) {
+				@apply text-4xl;
+			}
+		}
+		
+		// User info section
+		.userInfo {
+			@apply flex flex-col gap-2;
+			
+			// User greeting
+			.greeting {
+				@apply text-lg text-foreground mb-2 font-medium;
+			}
+			
+			// User status
+			.status {
+				@apply text-sm text-muted-foreground italic;
+			}
+		}
+		
+		// Login prompt for unauthenticated users
+		.loginPrompt {
+			@apply text-lg text-muted-foreground font-medium;
+		}
+		
+		// Quick actions section
+		.quickActions {
+			@apply mt-4 pt-4 border-t border-border;
+		}
+		
+		// Hint text
+		.hint {
+			@apply text-sm text-muted-foreground font-normal italic;
+		}
 	}
-}
-
-.userInfo {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
-}
-
-.greeting {
-	font-size: 1.125rem;
-	color: hsl(var(--foreground));
-	margin-bottom: 0.5rem;
-	font-weight: 500;
-}
-
-.status {
-	font-size: 0.875rem;
-	color: hsl(var(--muted-foreground));
-	font-style: italic;
-}
-
-.loginPrompt {
-	font-size: 1.125rem;
-	color: hsl(var(--muted-foreground));
-	font-weight: 500;
-}
-
-.quickActions {
-	margin-top: 1rem;
-	padding-top: 1rem;
-	border-top: 1px solid hsl(var(--border));
-}
-
-.hint {
-	font-size: 0.875rem;
-	color: hsl(var(--muted-foreground));
-	font-weight: 400;
-	font-style: italic;
 }
 
 // Responsive design
 @media (max-width: 640px) {
 	.welcomeCard {
-		height: 20rem;
-		margin-left: 1rem;
-		margin-right: 1rem;
-	}
-	
-	.title {
-		font-size: 1.5rem;
-	}
-	
-	.greeting, .loginPrompt {
-		font-size: 1rem;
+		@apply h-80 mx-4;
+		
+		.welcomeContent {
+			.title {
+				@apply text-2xl;
+			}
+			
+			.userInfo {
+				.greeting {
+					@apply text-base;
+				}
+			}
+			
+			.loginPrompt {
+				@apply text-base;
+			}
+		}
 	}
 }
