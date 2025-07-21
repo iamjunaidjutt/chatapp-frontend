@@ -9,6 +9,7 @@ import Sidebar from "@/components/chat/sidebar/Sidebar";
 import ChatWindow from "@/components/chat/chat-window/ChatWindow";
 import OnlineStatus from "@/components/chat/online-status/OnlineStatus";
 import { ModeToggle } from "@/components/theme/mode-toggle";
+import { userRoomAPI, roomsAPI } from "@/lib/apiService";
 
 export default function ChatLayout() {
 	const { data: session } = useSession();
@@ -22,11 +23,8 @@ export default function ChatLayout() {
 	// Load user rooms on component mount
 	const loadUserRooms = useCallback(async () => {
 		try {
-			const response = await fetch("/api/user-rooms");
-			if (response.ok) {
-				const data = await response.json();
-				setUserRooms(data.userRooms);
-			}
+			const data = await userRoomAPI.getUserRooms();
+			setUserRooms(data.rooms);
 		} catch (error) {
 			console.error("Error loading user rooms:", error);
 		} finally {
@@ -39,13 +37,17 @@ export default function ChatLayout() {
 		if (!selectedRoom) return;
 
 		try {
-			const response = await fetch(
-				`/api/rooms/${selectedRoom.id}/messages/`
-			);
-			if (response.ok) {
-				const data = await response.json();
-				setMessages(data.messages);
-			}
+			const data = await roomsAPI.getRoomMessages(selectedRoom.id);
+			// Convert Message type from apiService to ChatMessage type
+			const chatMessages = data.messages.map((msg) => ({
+				...msg,
+				id: msg._id,
+				sentAt: new Date(msg.sentAt),
+				editedAt: msg.editedAt ? new Date(msg.editedAt) : undefined,
+				createdAt: new Date(msg.createdAt),
+				updatedAt: new Date(msg.updatedAt),
+			}));
+			setMessages(chatMessages);
 		} catch (error) {
 			console.error("Error loading messages:", error);
 		}
@@ -71,25 +73,23 @@ export default function ChatLayout() {
 		if (!selectedRoom || !session?.user?.id) return;
 
 		try {
-			const response = await fetch(
-				`/api/rooms/${selectedRoom.id}/messages`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({
-						userId: session.user.id,
-						content,
-						messageType: "text",
-					}),
-				}
-			);
+			const data = await roomsAPI.sendMessage(selectedRoom.id, {
+				content,
+				messageType: "text",
+			});
 
-			if (response.ok) {
-				const newMessage = await response.json();
-				setMessages((prev) => [...prev, newMessage]);
-			}
+			// Convert the new message to ChatMessage format
+			const newMessage = {
+				...data.data,
+				id: data.data._id,
+				sentAt: new Date(data.data.sentAt),
+				editedAt: data.data.editedAt
+					? new Date(data.data.editedAt)
+					: undefined,
+				createdAt: new Date(data.data.createdAt),
+				updatedAt: new Date(data.data.updatedAt),
+			};
+			setMessages((prev) => [...prev, newMessage]);
 		} catch (error) {
 			console.error("Error sending message:", error);
 		}

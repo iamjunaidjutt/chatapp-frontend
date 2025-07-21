@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { authAPI } from "./lib/apiService";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	providers: [
@@ -13,32 +14,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			authorize: async (credentials) => {
 				let user = null;
 
-				const res = await fetch(
-					`${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
-					{
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({
-							email: credentials?.email,
-							password: credentials?.password,
-						}),
+				try {
+					const data = await authAPI.login({
+						email: credentials?.email as string,
+						password: credentials?.password as string,
+					});
+
+					user = {
+						...data.user,
+						accessToken: data.token, // Store the JWT token from our backend
+					};
+
+					if (!user) {
+						throw new Error("Invalid credentials.");
 					}
-				);
 
-				if (!res.ok) {
-					// No user found, so this is their first attempt to login
-					// Optionally, this is also the place you could do a user registration
+					return user;
+				} catch (error) {
+					console.error("Authentication error:", error);
 					throw new Error("Invalid credentials.");
 				}
-
-				const data = await res.json();
-				user = data.user;
-
-				if (!user) {
-					throw new Error("Invalid credentials.");
-				}
-
-				return user;
 			},
 		}),
 	],
@@ -54,6 +49,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				token.id = user.id;
 				token.email = user.email;
 				token.name = user.name;
+				token.accessToken = user.accessToken; // Store the JWT token
 			}
 			return token;
 		},
@@ -62,6 +58,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				session.user.id = token.id as string;
 				session.user.email = token.email as string;
 				session.user.name = token.name as string;
+				session.accessToken = token.accessToken as string; // Add to session
 			}
 			return session;
 		},

@@ -134,7 +134,6 @@ export default function HomeSidebar({ user, children }: HomeSidebarProps) {
 
 				<SidebarFooter className="border-t border-border">
 					<div className="flex items-center justify-between p-2">
-						<ModeToggle />
 						{user ? (
 							<div className="flex items-center gap-2 flex-1 ml-2">
 								<Avatar className="size-8">

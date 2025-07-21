@@ -60,6 +60,10 @@
 			.lastActivity {
 				@apply text-xs text-muted-foreground;
 			}
+			
+			.createdBy {
+				@apply text-xs text-muted-foreground;
+			}
 		}
 		
 		.joinButton {

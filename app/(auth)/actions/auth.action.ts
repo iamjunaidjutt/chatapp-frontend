@@ -2,6 +2,7 @@
 
 import { signIn, signOut } from "@/auth";
 import { LoginSchemaType } from "@/utils/validators/login.schema";
+import { sessionAPI } from "@/lib/apiService";
 
 export async function loginAction(data: LoginSchemaType) {
 	console.log("Form submitted with data:", data);
@@ -14,12 +15,9 @@ export async function loginAction(data: LoginSchemaType) {
 export async function logoutAction() {
 	console.log("Logout action called - enhanced version");
 
-	// First call the backend logout endpoint
+	// First call the backend logout endpoint using apiService
 	try {
-		await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
-			method: "POST",
-			credentials: "include",
-		});
+		await sessionAPI.logout();
 		console.log("Backend logout endpoint called successfully");
 	} catch (error) {
 		console.error("Error calling backend logout endpoint:", error);

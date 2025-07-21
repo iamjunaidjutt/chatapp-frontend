@@ -1,26 +1,12 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { userRoomAPI, roomsAPI, messagesAPI } from "./apiService";
 
 // Chat actions for server-side operations
-export async function fetchUserRooms(userId: string) {
+export async function fetchUserRooms() {
 	try {
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/user-rooms`,
-			{
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${userId}`, // This should be replaced with proper auth
-				},
-			}
-		);
-
-		if (!response.ok) {
-			throw new Error("Failed to fetch user rooms");
-		}
-
-		const data = await response.json();
+		const data = await userRoomAPI.getUserRooms();
 		return { success: true, data };
 	} catch (error) {
 		console.error("Error fetching user rooms:", error);
@@ -37,21 +23,11 @@ export async function fetchRoomMessages(
 	offset = 0
 ) {
 	try {
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/messages/${roomId}?limit=${limit}&offset=${offset}`,
-			{
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			}
+		const data = await roomsAPI.getRoomMessages(
+			roomId,
+			Math.floor(offset / limit) + 1,
+			limit
 		);
-
-		if (!response.ok) {
-			throw new Error("Failed to fetch room messages");
-		}
-
-		const data = await response.json();
 		return { success: true, data };
 	} catch (error) {
 		console.error("Error fetching room messages:", error);
@@ -62,33 +38,12 @@ export async function fetchRoomMessages(
 	}
 }
 
-export async function sendMessage(
-	roomId: string,
-	content: string,
-	userId: string
-) {
+export async function sendMessage(roomId: string, content: string) {
 	try {
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/messages`,
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${userId}`, // This should be replaced with proper auth
-				},
-				body: JSON.stringify({
-					roomId,
-					content,
-					messageType: "text",
-				}),
-			}
-		);
-
-		if (!response.ok) {
-			throw new Error("Failed to send message");
-		}
-
-		const data = await response.json();
+		const data = await roomsAPI.sendMessage(roomId, {
+			content,
+			messageType: "text",
+		});
 
 		// Revalidate the messages for this room
 		revalidatePath(`/chat/${roomId}`);
@@ -103,27 +58,9 @@ export async function sendMessage(
 	}
 }
 
-export async function joinRoom(roomId: string, userId: string) {
+export async function joinRoom(roomId: string) {
 	try {
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/user-rooms/join`,
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${userId}`,
-				},
-				body: JSON.stringify({
-					roomId,
-				}),
-			}
-		);
-
-		if (!response.ok) {
-			throw new Error("Failed to join room");
-		}
-
-		const data = await response.json();
+		const data = await userRoomAPI.joinRoom(roomId);
 
 		// Revalidate the user's rooms
 		revalidatePath("/chat");
@@ -138,27 +75,9 @@ export async function joinRoom(roomId: string, userId: string) {
 	}
 }
 
-export async function leaveRoom(roomId: string, userId: string) {
+export async function leaveRoom(roomId: string) {
 	try {
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/user-rooms/leave`,
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${userId}`,
-				},
-				body: JSON.stringify({
-					roomId,
-				}),
-			}
-		);
-
-		if (!response.ok) {
-			throw new Error("Failed to leave room");
-		}
-
-		const data = await response.json();
+		const data = await userRoomAPI.leaveRoom(roomId);
 
 		// Revalidate the user's rooms
 		revalidatePath("/chat");
@@ -174,36 +93,17 @@ export async function leaveRoom(roomId: string, userId: string) {
 }
 
 export async function updateUserRoomSettings(
-	userRoomId: string,
-	settings: {
-		notifications?: boolean;
-		role?: string;
-	}
+	roomId: string,
+	settings: { lastSeenAt?: string }
 ) {
 	try {
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/user-rooms/${userRoomId}`,
-			{
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(settings),
-			}
-		);
-
-		if (!response.ok) {
-			throw new Error("Failed to update room settings");
+		if (settings.lastSeenAt !== undefined) {
+			await userRoomAPI.updateLastSeen(roomId);
 		}
 
-		const data = await response.json();
-
-		// Revalidate the user's rooms
-		revalidatePath("/chat");
-
-		return { success: true, data };
+		return { success: true };
 	} catch (error) {
-		console.error("Error updating room settings:", error);
+		console.error("Error updating user room settings:", error);
 		return {
 			success: false,
 			error: error instanceof Error ? error.message : "Unknown error",
@@ -211,35 +111,16 @@ export async function updateUserRoomSettings(
 	}
 }
 
-export async function createRoom(
-	roomData: {
-		name: string;
-		description?: string;
-		isPrivate: boolean;
-		maxParticipants?: number;
-	},
-	userId: string
-) {
+export async function createRoom(roomData: {
+	name: string;
+	description?: string;
+	isPrivate?: boolean;
+	maxParticipants?: number;
+}) {
 	try {
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/rooms`,
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${userId}`,
-				},
-				body: JSON.stringify(roomData),
-			}
-		);
+		const data = await roomsAPI.createRoom(roomData);
 
-		if (!response.ok) {
-			throw new Error("Failed to create room");
-		}
-
-		const data = await response.json();
-
-		// Revalidate the user's rooms
+		// Revalidate the rooms list
 		revalidatePath("/chat");
 
 		return { success: true, data };
@@ -252,23 +133,14 @@ export async function createRoom(
 	}
 }
 
-export async function deleteMessage(messageId: string, userId: string) {
+export async function deleteMessage(messageId: string) {
 	try {
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/messages/${messageId}`,
-			{
-				method: "DELETE",
-				headers: {
-					Authorization: `Bearer ${userId}`,
-				},
-			}
-		);
+		const data = await messagesAPI.deleteMessage(messageId);
 
-		if (!response.ok) {
-			throw new Error("Failed to delete message");
-		}
+		// Revalidate the page
+		revalidatePath("/chat");
 
-		return { success: true };
+		return { success: true, data };
 	} catch (error) {
 		console.error("Error deleting message:", error);
 		return {
@@ -278,31 +150,13 @@ export async function deleteMessage(messageId: string, userId: string) {
 	}
 }
 
-export async function editMessage(
-	messageId: string,
-	content: string,
-	userId: string
-) {
+export async function editMessage(messageId: string, content: string) {
 	try {
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/messages/${messageId}`,
-			{
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${userId}`,
-				},
-				body: JSON.stringify({
-					content,
-				}),
-			}
-		);
+		const data = await messagesAPI.updateMessage(messageId, content);
 
-		if (!response.ok) {
-			throw new Error("Failed to edit message");
-		}
+		// Revalidate the page
+		revalidatePath("/chat");
 
-		const data = await response.json();
 		return { success: true, data };
 	} catch (error) {
 		console.error("Error editing message:", error);
