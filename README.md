@@ -102,7 +102,11 @@ yarn install
 
 ### 3. Environment Configuration
 
-Create a `.env.local` file in the root directory:
+Copy the example environment file:
+
+```bash
+cp .env.example .env.local
+```
 
 ```env
 # Backend API Base URL
