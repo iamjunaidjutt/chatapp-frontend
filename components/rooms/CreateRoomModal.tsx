@@ -14,17 +14,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { roomsAPI } from "@/lib/apiService";
+import { useSession } from "next-auth/react";
+import { createRoomAction } from "./rooms.action";
 
 interface CreateRoomModalProps {
-	onRoomCreated?: () => void;
 	children: React.ReactNode;
 }
 
-export default function CreateRoomModal({
-	onRoomCreated,
-	children,
-}: CreateRoomModalProps) {
+export default function CreateRoomModal({ children }: CreateRoomModalProps) {
+	const session = useSession();
 	const [open, setOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [formData, setFormData] = useState({
@@ -34,20 +32,16 @@ export default function CreateRoomModal({
 		maxParticipants: 50,
 	});
 
+	if (!session) {
+		return null;
+	}
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setIsLoading(true);
 
 		try {
-			await roomsAPI.createRoom({
-				name: formData.name,
-				description:
-					formData.description.trim() !== ""
-						? formData.description
-						: undefined,
-				isPrivate: formData.isPrivate,
-				maxParticipants: formData.maxParticipants,
-			});
+			await createRoomAction(formData);
 
 			setFormData({
 				name: "",
@@ -56,7 +50,6 @@ export default function CreateRoomModal({
 				maxParticipants: 50,
 			});
 			setOpen(false);
-			onRoomCreated?.();
 		} catch (error) {
 			console.error("Failed to create room:", error);
 			// You could add toast notification here

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { MessageCircle, Users, Home, Settings } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { User } from "next-auth";
+import { MessageCircle, Settings } from "lucide-react";
 
 import {
 	Sidebar,
@@ -25,7 +25,7 @@ import { ModeToggle } from "@/components/theme/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { logoutAction } from "@/app/(auth)/actions/auth.action";
 import { routes } from "@/config/routes";
-import styles from "./HomeSidebar.module.scss";
+import { navigationItems } from "@/lib/constants";
 
 interface HomeSidebarProps {
 	user: User | null;
@@ -47,27 +47,6 @@ export default function HomeSidebar({ user, children }: HomeSidebarProps) {
 			setActiveItem("chat");
 		}
 	}, [pathname]);
-
-	const navigationItems = [
-		{
-			id: "home",
-			title: "Home",
-			icon: Home,
-			href: routes.home,
-		},
-		{
-			id: "rooms",
-			title: "Rooms",
-			icon: Users,
-			href: routes.rooms,
-		},
-		{
-			id: "chat",
-			title: "Chat",
-			icon: MessageCircle,
-			href: routes.chat,
-		},
-	];
 
 	const handleNavigation = (item: (typeof navigationItems)[0]) => {
 		router.push(item.href);

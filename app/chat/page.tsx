@@ -6,7 +6,8 @@ import ChatLoading from "@/components/chat/chat-loading/ChatLoading";
 export default async function ChatPage() {
 	return (
 		<Suspense fallback={<ChatLoading />}>
-			<ChatLayout />
+			{/* <ChatLayout /> */}
+			<p>Chat Page</p>
 		</Suspense>
 	);
 }

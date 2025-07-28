@@ -9,7 +9,6 @@ import Sidebar from "@/components/chat/sidebar/Sidebar";
 import ChatWindow from "@/components/chat/chat-window/ChatWindow";
 import OnlineStatus from "@/components/chat/online-status/OnlineStatus";
 import { ModeToggle } from "@/components/theme/mode-toggle";
-import { userRoomAPI, roomsAPI } from "@/lib/apiService";
 
 export default function ChatLayout() {
 	const { data: session } = useSession();
@@ -21,43 +20,43 @@ export default function ChatLayout() {
 	const [loading, setLoading] = useState(true);
 
 	// Load user rooms on component mount
-	const loadUserRooms = useCallback(async () => {
-		try {
-			const data = await userRoomAPI.getUserRooms();
-			setUserRooms(data.rooms);
-		} catch (error) {
-			console.error("Error loading user rooms:", error);
-		} finally {
-			setLoading(false);
-		}
-	}, []);
+	// const loadUserRooms = useCallback(async () => {
+	// 	try {
+	// 		const data = await userRoomAPI.getUserRooms();
+	// 		setUserRooms(data.rooms);
+	// 	} catch (error) {
+	// 		console.error("Error loading user rooms:", error);
+	// 	} finally {
+	// 		setLoading(false);
+	// 	}
+	// }, []);
 
 	// Load messages when room is selected
-	const loadMessages = useCallback(async () => {
-		if (!selectedRoom) return;
+	// const loadMessages = useCallback(async () => {
+	// 	if (!selectedRoom) return;
 
-		try {
-			const data = await roomsAPI.getRoomMessages(selectedRoom.id);
-			// Convert Message type from apiService to ChatMessage type
-			const chatMessages = data.messages.map((msg) => ({
-				...msg,
-				id: msg._id,
-				sentAt: new Date(msg.sentAt),
-				editedAt: msg.editedAt ? new Date(msg.editedAt) : undefined,
-				createdAt: new Date(msg.createdAt),
-				updatedAt: new Date(msg.updatedAt),
-			}));
-			setMessages(chatMessages);
-		} catch (error) {
-			console.error("Error loading messages:", error);
-		}
-	}, [selectedRoom]);
+	// 	try {
+	// 		const data = await roomsAPI.getRoomMessages(selectedRoom.id);
+	// 		// Convert Message type from apiService to ChatMessage type
+	// 		const chatMessages = data.messages.map((msg) => ({
+	// 			...msg,
+	// 			id: msg._id,
+	// 			sentAt: new Date(msg.sentAt),
+	// 			editedAt: msg.editedAt ? new Date(msg.editedAt) : undefined,
+	// 			createdAt: new Date(msg.createdAt),
+	// 			updatedAt: new Date(msg.updatedAt),
+	// 		}));
+	// 		setMessages(chatMessages);
+	// 	} catch (error) {
+	// 		console.error("Error loading messages:", error);
+	// 	}
+	// }, [selectedRoom]);
 
-	useEffect(() => {
-		if (session?.user?.id) {
-			loadUserRooms();
-		}
-	}, [session, loadUserRooms]);
+	// useEffect(() => {
+	// 	if (session?.user?.id) {
+	// 		loadUserRooms();
+	// 	}
+	// }, [session, loadUserRooms]);
 
 	useEffect(() => {
 		if (selectedRoom) {

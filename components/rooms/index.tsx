@@ -12,49 +12,17 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Room, userRoomAPI } from "@/lib/apiService";
 import CreateRoomModal from "./CreateRoomModal";
 import styles from "./RoomsPage.module.scss";
+import { RoomWithParticipants } from "@/types";
+import { handleJoinRoom, handleLeaveRoom } from "./rooms.action";
 
 interface RoomsPageProps {
 	user: User | null;
-	rooms: Room[];
+	rooms: RoomWithParticipants[];
 }
 
 const RoomsPage = ({ user, rooms }: RoomsPageProps) => {
-	// Note: user parameter available for future authentication checks
-	console.log("Current user:", user);
-	console.log("Rooms data:", rooms);
-
-	const handleLeaveRoom = async (roomId: string) => {
-		try {
-			// Leave the room via API
-			await userRoomAPI.leaveRoom(roomId);
-		} catch (error) {
-			console.error("Failed to leave room:", error);
-		}
-	};
-
-	const handleJoinRoom = async (roomId: string) => {
-		try {
-			// Join the room via API
-			await userRoomAPI.joinRoom(roomId);
-
-			console.log("Successfully joined room:", roomId);
-			// Navigate to chat with selected room
-			window.location.href = `/chat?room=${roomId}`;
-		} catch (error) {
-			console.error("Failed to join room:", error);
-			// Still navigate to chat even if join fails (might already be a member)
-			window.location.href = `/chat?room=${roomId}`;
-		}
-	};
-
-	const handleRoomCreated = () => {
-		// Refresh the page to show the new room
-		window.location.reload();
-	};
-
 	const formatLastActivity = (updatedAt: string) => {
 		const now = new Date();
 		const updated = new Date(updatedAt);
@@ -78,7 +46,7 @@ const RoomsPage = ({ user, rooms }: RoomsPageProps) => {
 						Join existing rooms or create your own
 					</p>
 				</div>
-				<CreateRoomModal onRoomCreated={handleRoomCreated}>
+				<CreateRoomModal>
 					<Button className={styles.createButton}>
 						<Plus className="w-4 h-4 mr-2" />
 						Create Room
@@ -114,33 +82,48 @@ const RoomsPage = ({ user, rooms }: RoomsPageProps) => {
 								<div className={styles.participants}>
 									<Users className="w-4 h-4" />
 									<span>
-										{room.participantCount} /{" "}
+										{room.participants.length} /{" "}
 										{room.maxParticipants} members
 									</span>
 								</div>
 								<div className={styles.lastActivity}>
 									<span>
 										Last activity:{" "}
-										{formatLastActivity(room.updatedAt)}
+										{room?.updatedAt
+											? formatLastActivity(room.updatedAt)
+											: "Unknown"}
 									</span>
 								</div>
 								<div className={styles.createdBy}>
 									<span className="text-xs text-muted-foreground">
-										Created by: {room.createdBy.username}
+										Created by:{" "}
+										{room?.createdBy?.username || "Unknown"}
 									</span>
 								</div>
 							</div>
 							<Button
-								onClick={() =>
-									user?.id === room.createdBy._id
-										? handleLeaveRoom(room._id)
-										: handleJoinRoom(room._id)
-								}
+								onClick={() => {
+									if (!room._id) return;
+
+									const isParticipant =
+										room.participants.some(
+											(p) => p.userId === user?.id
+										);
+
+									if (isParticipant) {
+										handleLeaveRoom(room._id);
+									} else {
+										handleJoinRoom(room._id);
+									}
+								}}
 								className={styles.joinButton}
 								variant="outline"
+								disabled={!room._id}
 							>
 								<MessageCircle className="w-4 h-4 mr-2" />
-								{user?.id === room.createdBy._id
+								{room.participants.some(
+									(p) => p.userId === user?.id
+								)
 									? "Leave Room"
 									: "Join Room"}
 							</Button>
@@ -156,7 +139,7 @@ const RoomsPage = ({ user, rooms }: RoomsPageProps) => {
 					<p className={styles.emptyDescription}>
 						Create your first room to get started
 					</p>
-					<CreateRoomModal onRoomCreated={handleRoomCreated}>
+					<CreateRoomModal>
 						<Button className="mt-4">
 							<Plus className="w-4 h-4 mr-2" />
 							Create Room

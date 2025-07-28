@@ -23,6 +23,7 @@ import { loginAction } from "@/app/(auth)/actions/auth.action";
 
 const LoginForm = () => {
 	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 	const form = useForm<LoginSchemaType>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
@@ -34,7 +35,17 @@ const LoginForm = () => {
 	const submit = async (data: LoginSchemaType) => {
 		console.log("Form submitted with data:", data);
 		setIsLoading(true);
-		await loginAction(data);
+		setError(null); // Clear previous errors
+		try {
+			await loginAction(data);
+		} catch (error) {
+			console.error("Login error:", error);
+			setError(
+				error instanceof Error
+					? error.message
+					: "Login failed. Please try again."
+			);
+		}
 		setIsLoading(false);
 	};
 
@@ -42,6 +53,11 @@ const LoginForm = () => {
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(submit)} className={styles.form}>
 				<h3 className={styles.title}>Login</h3>
+				{error && (
+					<div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded mb-4">
+						{error}
+					</div>
+				)}
 				<FormField
 					control={form.control}
 					name="email"
